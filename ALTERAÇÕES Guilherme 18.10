@@ -1,14 +1,49 @@
-Passo a passo para o time (e no PC do professor)
+# 🚀 API Anchieta Backend
 
+Projeto backend desenvolvido em **Node.js**, **Sequelize** e **MySQL**, containerizado com **Docker** e documentado via **Swagger**.
+
+---
+
+## 🧭 Passo a passo para o time (e no PC do professor)
+
+### 1️⃣ Clonar o repositório
+```bash
 git clone <repo>
 cd <repo>
 
-docker compose up -d --build // para subir o conteiner
-docker exec -it node_app npx sequelize-cli db:migrate // iniciar o server
+2️⃣ Subir os containers
+docker compose up -d --build
 
-Abrir:
+3️⃣ Executar as migrações
+docker exec -it node_app npx sequelize-cli db:migrate
 
-http://localhost:3000
+4️⃣ Verificar se o servidor subiu corretamente
+docker logs node_app -f
 
-http://localhost:3000/docs (Swagger)
-Fluxo: register → login → Authorize (Bearer) → courses (POST/GET).
+5️⃣ Acessar a aplicação
+API:
+👉 http://localhost:3000
+
+Documentação (Swagger):
+👉 http://localhost:3000/docs
+
+🔐 Fluxo de uso (Swagger)
+POST /api/auth/register → Cadastrar usuário
+
+POST /api/auth/login → Fazer login e receber o token JWT
+
+Clique em Authorize (no topo do Swagger) e cole o token JWT
+
+Depois acesse:
+
+GET /api/courses → Listar cursos
+
+POST /api/courses → Criar novo curso
+
+💡 Fluxo completo: register → login → Authorize (Bearer) → courses (POST/GET)
+
+5️⃣ 🧹 Resetar o ambiente (opcional)
+docker compose down -v
+docker compose up -d --build
+docker exec -it node_app npx sequelize-cli db:migrate
+
