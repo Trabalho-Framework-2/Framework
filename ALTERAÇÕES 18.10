@@ -1,0 +1,46 @@
+Projeto Anchieta - Aplicação com Node.js, MySQL e Nginx via Docker
+Este projeto é um exemplo de aplicação web utilizando Node.js como backend, MySQL como banco de dados e Nginx como servidor reverso e de arquivos estáticos. Tudo é orquestrado com Docker e Docker Compose.
+
+Pré-requisitos
+Antes de iniciar, certifique-se de ter instalado:
+Docker
+
+Estrutura do Projeto
+1     DOCKER_ANCHIETA/
+2     ├── docker-compose.yml
+3     ├── Dockerfile
+4     ├── index.js
+5     ├── package.json
+6     ├── nginx/
+7     │   └── default.conf
+8     └── site/
+9         └── index.html
+10     
+
+Como executar o projeto
+1.	Clone o repositório (ou baixe os arquivos):
+1     git clone https://github.com/seu-usuario/seu-repositorio.git
+2     cd DOCKER_ANCHIETA
+3     
+1.	Construa e inicie os containers:
+1     docker-compose up -d --build
+2     Este comando precisar rodar dentro do diretório clonado: docker_anchieta
+1.	Acesse a aplicação:
+Abra o navegador e acesse:
+1     http://localhost:3000
+2     
+Você verá a página "Lista de Pessoas" servida pelo Nginx. Os dados são carregados dinamicamente via API Node.js conectada ao MySQL.
+
+Funcionalidades
+•	Interface web simples para visualização
+
+Observações
+•	A tabela pessoas é criada automaticamente ao iniciar o backend.
+•	As credenciais do banco estão definidas no docker-compose.yml.
+•	O Nginx serve os arquivos estáticos e redireciona chamadas da API para o backend Node.js.
+
+Sempre que alterar os arquivos e quiser subir as mudanças no docker
+Para subir alterações:
+1     docker-compose up –d --build
+2     docker restart node_app
+
