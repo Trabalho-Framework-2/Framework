@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Lista de Pessoas</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+    }
+    h1 {
+      color: #333;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+    th {
+      background-color: #f4f4f4;
+    }
+  </style>
+</head>
+<body>
+  <h1>Lista de Pessoas</h1>
+  <table id="tabela-pessoas">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Idade</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Dados serão inseridos aqui via JavaScript -->
+    </tbody>
+  </table>
+
+  <script>
+    fetch('/listar')
+      .then(response => response.json())
+      .then(data => {
+        const tbody = document.querySelector('#tabela-pessoas tbody');
+        data.forEach(pessoa => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${pessoa.id}</td>
+            <td>${pessoa.nome}</td>
+            <td>${pessoa.idade}</td>
+          `;
+          tbody.appendChild(row);
+        });
+      })
+      .catch(error => {
+        console.error('Erro ao buscar dados:', error);
+      });
+  </script>
+</body>
+</html>

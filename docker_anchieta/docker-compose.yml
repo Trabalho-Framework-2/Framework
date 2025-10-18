@@ -1,0 +1,32 @@
+
+### docker-compose.yml
+services:
+  node_app:
+    build: . # Constrói a imagem do Node.js a partir do Dockerfile na raiz do projeto
+    container_name: node_app # Nome do container para facilitar identificação
+    ports:
+      - "3000:3000" # Mapeia a porta 3000 do host para a porta 3000 do container
+    depends_on:
+      - mysql_anchieta # Garante que o container do MySQL seja iniciado antes
+
+  mysql_anchieta:
+    image: mysql:8.0 # Usa a imagem oficial do MySQL versão 8.0
+    container_name: mysql_anchieta # Nome do container do MySQL
+    restart: always # Reinicia o container automaticamente em caso de falha
+    environment:
+      MYSQL_ROOT_PASSWORD: Dm102030 # Define a senha do usuário root
+      MYSQL_DATABASE: mysql_anchieta # Cria o banco de dados com esse nome
+    ports:
+      - "3306:3306" # Mapeia a porta padrão do MySQL
+    command: --default-authentication-plugin=mysql_native_password # Define o plugin de autenticação
+
+  nginx:
+    image: nginx:latest # Usa a imagem oficial mais recente do Nginx
+    container_name: nginx_anchieta # Nome do container do Nginx
+    ports:
+      - "80:80" # Mapeia a porta 80 do host para o container
+    volumes:
+      - ./site:/usr/share/nginx/html # Monta o diretório local "site" como raiz do site
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf # Usa configuração personalizada do Nginx
+    depends_on:
+      - node_app # Garante que o app Node esteja rodando antes do Nginx

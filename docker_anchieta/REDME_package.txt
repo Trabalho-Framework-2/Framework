@@ -1,0 +1,14 @@
+
+{
+    "name": "anchieta-app", --> Nome do projeto
+    "version": "1.0.0", --> Versão do projeto
+    "main": "index.js", --> Arquivo principal
+    "scripts": {
+        "start": "node index.js" --> Comando para iniciar o app
+    },
+    "dependencies": {
+        "express": "^4.18.2", --> Framework web
+        "mysql": "^2.18.1" --> Driver para conexão com MySQL
+    }
+}
+
