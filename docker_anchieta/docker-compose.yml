@@ -2,12 +2,16 @@
 ### docker-compose.yml
 services:
   node_app:
-    build: . # Constrói a imagem do Node.js a partir do Dockerfile na raiz do projeto
-    container_name: node_app # Nome do container para facilitar identificação
+    build: .
+    container_name: node_app
     ports:
-      - "3000:3000" # Mapeia a porta 3000 do host para a porta 3000 do container
+      - "3000:3000"
     depends_on:
-      - mysql_anchieta # Garante que o container do MySQL seja iniciado antes
+      - mysql_anchieta
+    volumes:
+      - ./:/app
+      - /app/node_modules
+  
 
   mysql_anchieta:
     image: mysql:8.0 # Usa a imagem oficial do MySQL versão 8.0

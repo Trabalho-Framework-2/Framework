@@ -4,7 +4,7 @@ COPY package*.json ./
 RUN npm install 
 COPY . .
 EXPOSE 3000
-CMD ["node", "index.js"]
+CMD ["node", "src/app.js"]
 
 ### Dockerfile ^
 #FROM node:18 --> Usa imagem oficial do Node.js versão 18
