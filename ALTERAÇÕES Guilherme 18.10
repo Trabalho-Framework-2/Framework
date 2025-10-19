@@ -42,7 +42,7 @@ POST /api/courses → Criar novo curso
 
 💡 Fluxo completo: register → login → Authorize (Bearer) → courses (POST/GET)
 
-5️⃣ 🧹 Resetar o ambiente (opcional)
+6️⃣ 🧹 Resetar o ambiente (opcional)
 docker compose down -v
 docker compose up -d --build
 docker exec -it node_app npx sequelize-cli db:migrate
