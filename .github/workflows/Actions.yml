@@ -1,0 +1,64 @@
+name: Anchieta App CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: Dm102030
+          MYSQL_DATABASE: mysql_anchieta
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - name: 🔄 Checkout do código
+        uses: actions/checkout@v3
+
+      - name: 🟢 Instalar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: 📦 Instalar dependências do projeto
+        run: npm install
+
+      - name: 🛠 Instalar Sequelize CLI globalmente
+        run: npm install -g sequelize-cli
+
+      - name: 🗃️ Aguardar MySQL subir
+        run: sleep 20
+
+      - name: 🔧 Executar migrações do banco
+        run: npx sequelize-cli db:migrate --config src/config/database.js
+
+      - name: 🚀 Iniciar backend em segundo plano
+        run: |
+          nohup npm start &
+          sleep 10
+
+      - name: ✅ Testar rota inicial /
+        run: curl --fail http://localhost:3000 || exit 1
+
+      - name: ✅ Testar rota pública /api/auth/register
+        run: |
+          curl --fail -X POST http://localhost:3000/api/auth/register \
+            -H "Content-Type: application/json" \
+            -d '{"nome":"teste","email":"teste@anchieta.com","senha":"123456"}' || exit 1
+
+      - name: ✅ Testar rota protegida /api/courses (espera 401 sem token)
+        run: |
+          curl -i http://localhost:3000/api/courses | grep "401" || exit 1
