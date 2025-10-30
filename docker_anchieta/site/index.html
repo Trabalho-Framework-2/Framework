@@ -2,63 +2,36 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Lista de Pessoas</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 40px;
-    }
-    h1 {
-      color: #333;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-    th, td {
-      padding: 10px;
-      border: 1px solid #ccc;
-      text-align: left;
-    }
-    th {
-      background-color: #f4f4f4;
-    }
-  </style>
+  <title>Login</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <h1>Lista de Pessoas</h1>
-  <table id="tabela-pessoas">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nome</th>
-        <th>Idade</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- Dados serão inseridos aqui via JavaScript -->
-    </tbody>
-  </table>
 
-  <script>
-    fetch('/listar')
-      .then(response => response.json())
-      .then(data => {
-        const tbody = document.querySelector('#tabela-pessoas tbody');
-        data.forEach(pessoa => {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${pessoa.id}</td>
-            <td>${pessoa.nome}</td>
-            <td>${pessoa.idade}</td>
-          `;
-          tbody.appendChild(row);
-        });
-      })
-      .catch(error => {
-        console.error('Erro ao buscar dados:', error);
-      });
-  </script>
+  <main class="login-page">
+    <div class="login-container">
+      <div class="login-header">
+        <h2>Login</h2>
+      </div>
+      <div class="login-body">
+        <form id="loginForm">
+          <label for="email">E-mail:</label>
+          <input type="email" id="email" name="email" placeholder="Digite seu email aqui..." required>
+
+          <label for="senha">Senha:</label>
+          <input type="password" id="senha" name="senha" placeholder="Digite sua senha aqui..." required>
+
+          <button type="submit">Logar</button>
+        </form>
+
+        <p id="mensagem"></p>
+      </div>
+      <div class="login-footer">
+        Ainda não tem conta?
+        <a href="cadastro.html">Cadastre-se</a>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/login.js"></script>
 </body>
 </html>

@@ -3,9 +3,15 @@ const path = require('path');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require(path.join(__dirname, '../swagger.json'));       
 const { sequelize } = require('./models');
+const cors = require('cors');
 
 const app = express();
+
+app.use(cors());
+
 app.use(express.json());
+
+app.use(express.static(path.join(__dirname, '../site'))); //permite que sirva o site
 
 const routes = require('./routes');
 app.use('/api', routes);

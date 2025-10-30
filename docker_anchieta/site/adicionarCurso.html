@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Adicionar Cursos</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="cursos-page">
+
+  <header class="site-header">
+    <div class="header-container">
+      <h1>Trabalho Desenvolvimento de Framework</h1>
+      <nav>
+        <a class="sair">Sair</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="cursos-content">
+    <h2>Adicionar Curso</h2>
+    <div class="tabela-container">
+      <div class="cadastro-body">
+        <form id="novoCursoForm">
+          <label for="curso">Curso</label>
+          <input type="text" id="curso" name="nome" required>
+
+          <label for="periodo">Período</label>
+          <input type="text" id="periodo" name="email" required>
+
+          <label for="modulo">Módulo</label>
+          <input type="text" id="modulo" name="senha" required>
+
+          <button class="btn-adicionar" type="submit">Adicionar</button>
+        </form>
+
+        <p id="mensagem"></p>
+      </div>
+    </div>
+    
+    <a href="listarCurso.html" class="btn-adicionarCurso">Voltar</a>
+  </main>
+
+    
+    
+  <footer class="site-footer">
+    <p>© 2025 Trabalho Desenvolvimento de Framework — Todos os direitos reservados.</p>
+  </footer>
+
+  <script src="js/adicionarCurso.js"></script>
+
+</body>
+</html>
