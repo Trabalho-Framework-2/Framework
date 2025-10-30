@@ -12,7 +12,7 @@ git clone <repo>
 cd <repo>
 
 2️⃣ Subir os containers
-docker compose up -d --build
+docker compose up --build
 
 3️⃣ Executar as migrações
 docker exec -it node_app npx sequelize-cli db:migrate
