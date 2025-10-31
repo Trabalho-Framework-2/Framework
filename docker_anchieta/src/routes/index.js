@@ -6,6 +6,7 @@ const { authMiddleware } = require('../middleware/auth');
 const router = Router();
 
 router.use('/auth', auth); // rota pública
-router.use('/courses', authMiddleware, courses); // rota protegida
+router.use('/courses', courses); // rota protegida
 
 module.exports = router;
+
