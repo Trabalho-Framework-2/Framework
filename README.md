@@ -84,3 +84,40 @@ docker compose down -v
 docker compose up -d --build
 docker exec -it node_app npx sequelize-cli db:migrate
 ```
+
+## 👨‍💻 Uso Final
+
+O sistema foi desenvolvido para ser simples e intuitivo para o usuário final. Abaixo está o fluxo completo de navegação e uso:
+
+### 1️⃣ Cadastro de Usuário
+- Acesse a página `cadastro.html`.
+- Preencha nome, email e senha.
+- Clique em "Cadastrar".
+- Após sucesso, será redirecionado para a página de login.
+
+### 2️⃣ Login
+- Acesse a página `index.html`.
+- Informe email e senha.
+- Clique em "Logar".
+- O sistema irá autenticar e salvar o token JWT no navegador.
+
+### 3️⃣ Listagem de Cursos
+- Após login, acesse `listarCurso.html`.
+- O sistema verifica o token JWT.
+- Se válido, uma requisição GET é feita para a API.
+- Os cursos são exibidos em uma tabela com nome, período e módulo.
+
+### 4️⃣ Adição de Cursos
+- Acesse `adicionarCurso.html`.
+- Preencha os dados do curso.
+- Clique em "Adicionar".
+- O curso será enviado via POST para a API com autenticação JWT.
+- Uma mensagem de sucesso será exibida.
+
+### 5️⃣ Logout
+- Clique no botão "Sair" presente nas páginas protegidas.
+- O token será removido e o usuário redirecionado para a página de login.
+
+---
+
+Esse fluxo garante que todas as funcionalidades estejam protegidas por autenticação e que o usuário tenha uma experiência fluida e segura.
