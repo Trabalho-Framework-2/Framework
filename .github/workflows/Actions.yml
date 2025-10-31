@@ -37,31 +37,14 @@ jobs:
         with:
           node-version: 18
 
-      - name: 🧰 Instalar utilitários (jq, netcat)
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y jq netcat
-
-      - name: 📦 Instalar dependências do projeto
-        run: |
-          if [ -f package-lock.json ]; then
-            npm ci
-          else
-            npm install
-          fi
+      - name: 📦 Instalar dependências do projeto (inclui mysql2)
+        run: npm install
 
       - name: 🛠 Instalar Sequelize CLI globalmente
         run: npm install -g sequelize-cli
 
-      - name: 🗃️ Aguardar MySQL subir (ping ativo)
-        run: |
-          for i in {1..20}; do
-            mysqladmin ping -h 127.0.0.1 -uroot -pDm102030 --silent && echo "MySQL ok" && exit 0
-            echo "Aguardando MySQL... tent $i"
-            sleep 3
-          done
-          echo "MySQL não respondeu"
-          exit 1
+      - name: 🗃️ Aguardar MySQL subir
+        run: sleep 20
 
       - name: 🔧 Executar migrações do banco
         run: npm run migrate
@@ -69,15 +52,14 @@ jobs:
       - name: 🚀 Iniciar backend em segundo plano
         run: |
           nohup npm start > nohup.out 2>&1 &
-          # dá um tempo pro app levantar
           sleep 30
 
       - name: 🔍 Verificar se o backend está rodando na porta 3000
         run: |
           for i in {1..10}; do
-            nc -z 127.0.0.1 3000 && echo "Servidor está rodando" && exit 0
-            echo "Aguardando servidor subir... tent $i"
-            sleep 3
+            nc -z localhost 3000 && echo "Servidor está rodando" && exit 0
+            echo "Aguardando servidor subir..."
+            sleep 5
           done
           echo "Servidor não respondeu na porta 3000"
           cat nohup.out || echo "Sem logs disponíveis"
@@ -86,36 +68,28 @@ jobs:
       - name: ✅ Testar rota inicial /
         run: curl --fail http://localhost:3000 || exit 1
 
-      - name: ✅ Testar rota pública /api/auth/register (aceita 201 ou 409)
+      - name: ✅ Testar rota pública /api/auth/register
         run: |
-          STATUS=$(curl -sS -o /dev/null -w "%{http_code}" -X POST http://localhost:3000/api/auth/register \
+          curl --fail -X POST http://localhost:3000/api/auth/register \
             -H "Content-Type: application/json" \
-            -d '{"nome":"teste","email":"teste@anchieta.com","senha":"123456"}')
-          echo "STATUS_REGISTER=$STATUS"
-          if [ "$STATUS" = "201" ] || [ "$STATUS" = "409" ]; then
-            echo "Registro ok (novo ou já existente)."
-            exit 0
-          fi
-          echo "Falha no registro público. Status=$STATUS"
-          exit 1
+            -d '{"nome":"teste","email":"teste@anchieta.com","senha":"123456"}' || exit 1
 
       - name: ✅ Testar rota protegida /api/courses (espera 401 sem token)
         run: |
-          URL="http://localhost:3000/api/courses"
-          STATUS=$(curl -sS -o resp_courses.txt -w "%{http_code}" "$URL" || true)
-          echo "HTTP_STATUS=$STATUS"
-          echo "----- BODY (sem token) -----"
-          cat resp_courses.txt || true
-
-          if [ "$STATUS" = "401" ]; then
-            echo "OK: rota protegida exige token (401)."
-            exit 0
-          fi
-          if [ "$STATUS" = "404" ]; then
-            echo "ERRO: rota /api/courses não encontrada. Verifique app.use('/api', routes) e router de courses."
-            exit 1
-          fi
-          echo "ERRO: esperado 401, recebido $STATUS"
+          for i in {1..10}; do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/api/courses)
+            if [ "$STATUS" -eq 401 ]; then
+              echo "✅ Rota protegida respondeu corretamente com 401"
+              exit 0
+            elif [ "$STATUS" -eq 404 ]; then
+              echo "⚠️ A rota ainda não está disponível. Tentativa $i..."
+              sleep 5
+            else
+              echo "❌ Esperado status 401, mas recebeu $STATUS"
+              exit 1
+            fi
+          done
+          echo "⛔ Rota /api/courses não respondeu com 401 após várias tentativas"
           exit 1
 
       - name: 🌐 Verificar arquivos do frontend
@@ -132,36 +106,21 @@ jobs:
 
       - name: 🧪 Validar comunicação frontend → backend
         run: |
-          # registra usuário do teste (ok se já existir)
-          STATUS=$(curl -sS -o /dev/null -w "%{http_code}" -X POST http://localhost:3000/api/auth/register \
+          curl --fail -X POST http://localhost:3000/api/auth/register \
             -H "Content-Type: application/json" \
-            -d '{"nome":"frontend","email":"front@anchieta.com","senha":"123456"}')
-          echo "STATUS_REGISTER_FRONT=$STATUS"
-          if [ "$STATUS" != "201" ] && [ "$STATUS" != "409" ]; then
-            echo "Falha ao preparar usuário do teste (status $STATUS)"; exit 1
-          fi
+            -d '{"nome":"frontend","email":"front@anchieta.com","senha":"123456"}' || exit 1
 
-          # login e captura token (usa jq)
-          TOKEN=$(curl -sS -X POST http://localhost:3000/api/auth/login \
+          TOKEN=$(curl -s -X POST http://localhost:3000/api/auth/login \
             -H "Content-Type: application/json" \
             -d '{"email":"front@anchieta.com","senha":"123456"}' | jq -r .token)
-          echo "TOKEN_PREFIX=$(echo "$TOKEN" | cut -c1-20)..."
-          if [ -z "$TOKEN" ] || [ "$TOKEN" = "null" ]; then
-            echo "Não foi possível obter token JWT no login"; exit 1
-          fi
 
-          # cria curso protegido
           curl --fail -X POST http://localhost:3000/api/courses \
             -H "Authorization: Bearer $TOKEN" \
             -H "Content-Type: application/json" \
-            -d '{"nome":"Engenharia","periodo":"Noturno","modulo":"3"}'
+            -d '{"nome":"Engenharia","periodo":"Noturno","modulo":"3"}' || exit 1
 
-          # lista cursos protegido
           curl --fail -X GET http://localhost:3000/api/courses \
-            -H "Authorization: Bearer $TOKEN"
+            -H "Authorization: Bearer $TOKEN" || exit 1
 
-      - name: 📄 Verificar logs do backend (nohup.out)
-        if: failure()
-        run: |
-          echo "===== nohup.out ====="
-          cat nohup.out || echo "Sem logs disponíveis"
+      - name: 📄 Verificar logs do backend
+        run: cat nohup.out || echo "Sem logs disponíveis"
