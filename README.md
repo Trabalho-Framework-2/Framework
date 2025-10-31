@@ -87,8 +87,6 @@ docker exec -it node_app npx sequelize-cli db:migrate
 
 ## 👨‍💻 Uso Final
 
-O sistema foi desenvolvido para ser simples e intuitivo para o usuário final. Abaixo está o fluxo completo de navegação e uso:
-
 ### 1️⃣ Cadastro de Usuário
 - Acesse a página `cadastro.html`.
 - Preencha nome, email e senha.
