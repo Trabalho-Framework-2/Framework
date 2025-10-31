@@ -10,6 +10,10 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: docker_anchieta
+
     services:
       mysql:
         image: mysql:8.0
@@ -33,7 +37,7 @@ jobs:
         with:
           node-version: 18
 
-      - name: 📦 Instalar dependências do projeto
+      - name: 📦 Instalar dependências do projeto (inclui mysql2)
         run: npm install
 
       - name: 🛠 Instalar Sequelize CLI globalmente
@@ -43,12 +47,23 @@ jobs:
         run: sleep 20
 
       - name: 🔧 Executar migrações do banco
-        run: npx sequelize-cli db:migrate --config src/config/database.js
+        run: npm run migrate
 
       - name: 🚀 Iniciar backend em segundo plano
         run: |
-          nohup npm start &
-          sleep 10
+          nohup npm start > nohup.out 2>&1 &
+          sleep 30
+
+      - name: 🔍 Verificar se o backend está rodando na porta 3000
+        run: |
+          for i in {1..10}; do
+            nc -z localhost 3000 && echo "Servidor está rodando" && exit 0
+            echo "Aguardando servidor subir..."
+            sleep 5
+          done
+          echo "Servidor não respondeu na porta 3000"
+          cat nohup.out || echo "Sem logs disponíveis"
+          exit 1
 
       - name: ✅ Testar rota inicial /
         run: curl --fail http://localhost:3000 || exit 1
@@ -61,4 +76,42 @@ jobs:
 
       - name: ✅ Testar rota protegida /api/courses (espera 401 sem token)
         run: |
-          curl -i http://localhost:3000/api/courses | grep "401" || exit 1
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/api/courses)
+          if [ "$STATUS" -ne 401 ]; then
+            echo "Esperado status 401, mas recebeu $STATUS"
+            exit 1
+          fi
+          echo "Rota protegida respondeu corretamente com 401"
+
+      - name: 🌐 Verificar arquivos do frontend
+        run: |
+          test -f site/index.html
+          test -f site/cadastro.html
+          test -f site/listarCurso.html
+          test -f site/adicionarCurso.html
+          test -f site/css/style.css
+          test -f site/js/login.js
+          test -f site/js/cadastro.js
+          test -f site/js/listarCurso.js
+          test -f site/js/adicionarCurso.js
+
+      - name: 🧪 Validar comunicação frontend → backend
+        run: |
+          curl --fail -X POST http://localhost:3000/api/auth/register \
+            -H "Content-Type: application/json" \
+            -d '{"nome":"frontend","email":"front@anchieta.com","senha":"123456"}' || exit 1
+
+          TOKEN=$(curl -s -X POST http://localhost:3000/api/auth/login \
+            -H "Content-Type: application/json" \
+            -d '{"email":"front@anchieta.com","senha":"123456"}' | jq -r .token)
+
+          curl --fail -X POST http://localhost:3000/api/courses \
+            -H "Authorization: Bearer $TOKEN" \
+            -H "Content-Type: application/json" \
+            -d '{"nome":"Engenharia","periodo":"Noturno","modulo":"3"}' || exit 1
+
+          curl --fail -X GET http://localhost:3000/api/courses \
+            -H "Authorization: Bearer $TOKEN" || exit 1
+
+      - name: 📄 Verificar logs do backend
+        run: cat nohup.out || echo "Sem logs disponíveis"
