@@ -76,12 +76,21 @@ jobs:
 
       - name: ✅ Testar rota protegida /api/courses (espera 401 sem token)
         run: |
-          STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/api/courses)
-          if [ "$STATUS" -ne 401 ]; then
-            echo "Esperado status 401, mas recebeu $STATUS"
-            exit 1
-          fi
-          echo "Rota protegida respondeu corretamente com 401"
+          for i in {1..10}; do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/api/courses)
+            if [ "$STATUS" -eq 401 ]; then
+              echo "✅ Rota protegida respondeu corretamente com 401"
+              exit 0
+            elif [ "$STATUS" -eq 404 ]; then
+              echo "⚠️ A rota ainda não está disponível. Tentativa $i..."
+              sleep 5
+            else
+              echo "❌ Esperado status 401, mas recebeu $STATUS"
+              exit 1
+            fi
+          done
+          echo "⛔ Rota /api/courses não respondeu com 401 após várias tentativas"
+          exit 1
 
       - name: 🌐 Verificar arquivos do frontend
         run: |
