@@ -142,3 +142,23 @@ Após adicionar o curso com as informações desejadas, irá executar o localhos
 
 <img width="1919" height="1067" alt="image" src="https://github.com/user-attachments/assets/729fa344-5fdd-40e3-83c2-bb213b599099" />
 
+Após inserir o caminho para o Swagger, você irá na parte Api/auth/login 
+
+<img width="1911" height="1066" alt="image" src="https://github.com/user-attachments/assets/ef88301f-1ab8-4912-a4d2-d2881b3afddb" />
+
+você irá preencher com os dados usados para realizar o login e após clicará no "execute"
+
+<img width="1864" height="889" alt="image" src="https://github.com/user-attachments/assets/4b13d5b9-c52a-42ba-9228-ccf2b063e6f2" />
+
+Após pegar o token, abaixo dos dados preenchidos
+
+<img width="1910" height="1002" alt="image" src="https://github.com/user-attachments/assets/68251eac-81fc-4600-9a35-b106d5054a5c" />
+
+Você irá no Api/cursos e clicará em executar e exibirá os cursos cadastrados.
+<img width="1909" height="874" alt="image" src="https://github.com/user-attachments/assets/8a239693-51d7-4ca1-a7e7-40dd0f9bf9dd" />
+
+
+
+
+
+
