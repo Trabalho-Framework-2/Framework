@@ -12,7 +12,7 @@ Este sistema permite que usuários se cadastrem, façam login, visualizem cursos
 ```bash
 docker_anchieta/
 ├── node_modules/              # Dependências instaladas do Node.js
-├── site/                      # Arquivos estáticos ou frontend (caso aplicável)
+├── site/                      # Arquivos frontend
 ├── src/                       # Código-fonte principal da aplicação
 │   ├── config/                # Arquivos de configuração (ex: banco de dados, variáveis de ambiente)
 │   ├── controllers/           # Controladores responsáveis pela lógica das rotas
@@ -30,7 +30,7 @@ docker_anchieta/
 ├── Dockerfile                 # Definição da imagem Docker da aplicação
 ├── package.json               # Metadados do projeto e dependências Node.js
 ├── package-lock.json          # Registro das versões exatas das dependências instaladas
-├── REDME_package.txt          # Documento adicional (possivelmente instruções de instalação)
+├── REDME_package.txt          # Documento adicional
 └── swagger.json               # Documentação da API no formato Swagger (OpenAPI)
 ```
 ---
