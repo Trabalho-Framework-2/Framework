@@ -9,6 +9,7 @@ Este sistema permite que usuários se cadastrem, façam login, visualizem cursos
 
 ---
 ### ⚙️ESTRUTURA
+```
 docker_anchieta/
 ├── node_modules/              # Dependências instaladas do Node.js
 ├── site/                      # Arquivos estáticos ou frontend (caso aplicável)
@@ -31,7 +32,7 @@ docker_anchieta/
 ├── package-lock.json          # Registro das versões exatas das dependências instaladas
 ├── REDME_package.txt          # Documento adicional (possivelmente instruções de instalação)
 └── swagger.json               # Documentação da API no formato Swagger (OpenAPI)
-
+```
 ---
 
 ## ⚙️ Funcionamento do Sistema
