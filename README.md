@@ -119,3 +119,10 @@ docker exec -it node_app npx sequelize-cli db:migrate
 ---
 
 Esse fluxo garante que todas as funcionalidades estejam protegidas por autenticação e que o usuário tenha uma experiência fluida e segura.
+
+
+
+Código rodando na prática
+
+<img width="1919" height="1067" alt="image" src="https://github.com/user-attachments/assets/729fa344-5fdd-40e3-83c2-bb213b599099" />
+
