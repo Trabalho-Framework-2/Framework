@@ -9,7 +9,7 @@ Este sistema permite que usuários se cadastrem, façam login, visualizem cursos
 
 ---
 ### ⚙️ESTRUTURA
-```
+```bash
 docker_anchieta/
 ├── node_modules/              # Dependências instaladas do Node.js
 ├── site/                      # Arquivos estáticos ou frontend (caso aplicável)
