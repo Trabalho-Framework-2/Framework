@@ -122,7 +122,23 @@ Esse fluxo garante que todas as funcionalidades estejam protegidas por autentica
 
 
 
-Código rodando na prática
+Código frontend sendo executado na prática
+
+<img width="1917" height="1066" alt="image" src="https://github.com/user-attachments/assets/617848f7-f9e6-4329-9685-50b59652e4f8" />
+
+O usuário realiza o cadastro preenchendo o nome, e-mail e senha desejada como a imagem abaixo.
+
+<img width="1919" height="1067" alt="image" src="https://github.com/user-attachments/assets/08851f39-37f0-4e39-866a-1dc2ade5a192" />
+
+Voltando na área de Login, você preeenche com os dados cadastrados.
+
+<img width="1919" height="991" alt="image" src="https://github.com/user-attachments/assets/eee18fda-5a2a-4d8b-94bc-18e914269cd1" />
+
+Seleciona na opção de Adicionar curso.
+
+<img width="1919" height="994" alt="image" src="https://github.com/user-attachments/assets/2d1f80ee-5124-4e30-b096-e53ec9be6f4f" />
+
+Após adicionar o curso com as informações desejadas, irá executar o localhost:3000/docs.
 
 <img width="1919" height="1067" alt="image" src="https://github.com/user-attachments/assets/729fa344-5fdd-40e3-83c2-bb213b599099" />
 
