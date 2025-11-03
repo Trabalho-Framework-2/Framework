@@ -8,6 +8,31 @@ Este sistema permite que usuários se cadastrem, façam login, visualizem cursos
 - **Infraestrutura**: Containerização com Docker e documentação via Swagger.
 
 ---
+### ⚙️ESTRUTURA
+docker_anchieta/
+├── node_modules/              # Dependências instaladas do Node.js
+├── site/                      # Arquivos estáticos ou frontend (caso aplicável)
+├── src/                       # Código-fonte principal da aplicação
+│   ├── config/                # Arquivos de configuração (ex: banco de dados, variáveis de ambiente)
+│   ├── controllers/           # Controladores responsáveis pela lógica das rotas
+│   ├── middleware/            # Middlewares personalizados (ex: autenticação, logs)
+│   ├── migrations/            # Scripts de migração do banco de dados (usando Sequelize)
+│   ├── models/                # Definições dos modelos do Sequelize (entidades do banco)
+│   └── routes/                # Definição das rotas da aplicação
+│
+├── app.js                     # Arquivo principal da aplicação Express
+├── index.js                   # Ponto de entrada da aplicação (inicialização do servidor)
+│
+├── .gitignore                 # Arquivos e pastas ignorados pelo Git
+├── .sequelizerc               # Configuração do Sequelize (caminhos para models, migrations, etc.)
+├── docker-compose.yml         # Configuração dos containers Docker (serviços, volumes, redes)
+├── Dockerfile                 # Definição da imagem Docker da aplicação
+├── package.json               # Metadados do projeto e dependências Node.js
+├── package-lock.json          # Registro das versões exatas das dependências instaladas
+├── REDME_package.txt          # Documento adicional (possivelmente instruções de instalação)
+└── swagger.json               # Documentação da API no formato Swagger (OpenAPI)
+
+---
 
 ## ⚙️ Funcionamento do Sistema
 
